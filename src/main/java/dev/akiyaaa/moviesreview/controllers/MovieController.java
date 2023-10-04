@@ -5,6 +5,7 @@ import dev.akiyaaa.moviesreview.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,17 +27,20 @@ public class MovieController {
         return new ResponseEntity<Movie>(movieService.getMovieByImdbId(imdbId), HttpStatus.OK);
     }
     
-    @PostMapping("/add")
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Movie> addMovie(@RequestBody Movie movie){
         return new ResponseEntity<Movie>(movieService.addMovie(movie), HttpStatus.CREATED);
     }
     
     @PutMapping("/{imdbId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Movie> updateMovie(@PathVariable String imdbId, @RequestBody Movie movie){
         return new ResponseEntity<Movie>(movieService.updateMovie(imdbId, movie), HttpStatus.OK);
     }
     
     @DeleteMapping("/{imdbId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteMovie(@PathVariable String imdbId){
         movieService.deleteMovie(imdbId);
         return new ResponseEntity<>(HttpStatus.OK);
