@@ -58,7 +58,7 @@ public class WebSecurityConfig {
         httpSecurity.cors(cors -> cors
                         .configurationSource(request -> {
                             CorsConfiguration config = new CorsConfiguration();
-                            config.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5173")); // Add your frontend origin here
+                            config.setAllowedOrigins(Arrays.asList("https://watch-and-reviews.netlify.app/")); // Add your frontend origin here
                             config.addAllowedHeader("*");
                             config.addAllowedMethod("*");
                             return config;

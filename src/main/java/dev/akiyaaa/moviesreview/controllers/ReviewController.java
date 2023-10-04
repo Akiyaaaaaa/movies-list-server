@@ -1,5 +1,6 @@
 package dev.akiyaaa.moviesreview.controllers;
 
+import dev.akiyaaa.moviesreview.models.DTO.request.ReviewRequest;
 import dev.akiyaaa.moviesreview.models.Review;
 import dev.akiyaaa.moviesreview.service.ReviewService;
 import org.bson.types.ObjectId;
@@ -13,14 +14,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/reviews")
-@CrossOrigin(origins = "*")
 public class ReviewController {
     @Autowired
     private ReviewService reviewService;
     @PostMapping
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<Review> createReview(@RequestBody Map<String, String> content){
-        return new ResponseEntity<Review>(reviewService.createReview(content.get("reviewContent"), content.get("imdbId")), HttpStatus.CREATED);
+    public ResponseEntity<Review> createReview(@RequestBody ReviewRequest reviewRequest){
+        return new ResponseEntity<Review>(reviewService.createReview(reviewRequest), HttpStatus.CREATED);
     }
     
     @PutMapping("/{reviewId}")
