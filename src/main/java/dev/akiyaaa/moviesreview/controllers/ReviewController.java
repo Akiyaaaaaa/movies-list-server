@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -17,6 +18,11 @@ import java.util.Map;
 public class ReviewController {
     @Autowired
     private ReviewService reviewService;
+    
+    @GetMapping
+    public ResponseEntity<List<Review>> getAll(){
+        return new ResponseEntity<List<Review>>(reviewService.getAll(), HttpStatus.OK);
+    }
     @PostMapping
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Review> createReview(@RequestBody ReviewRequest reviewRequest){

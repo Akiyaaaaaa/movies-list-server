@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ReviewService {
@@ -22,6 +23,10 @@ public class ReviewService {
     private ReviewRepository reviewRepository;
     @Autowired
     private MongoTemplate mongoTemplate;
+    
+    public List<Review> getAll(){
+        return reviewRepository.findAll();
+    }
     public Review createReview(ReviewRequest reviewRequest){
         User user = new User();
         user.setId(reviewRequest.getUserId());
