@@ -21,7 +21,7 @@ public class ReviewController {
     
     @GetMapping
     public ResponseEntity<List<Review>> getAll(){
-        return  new ResponseEntity<List<Review>>(reviewService.getAll(), HttpStatus.OK);
+        return new ResponseEntity<List<Review>>(reviewService.getAll(), HttpStatus.OK);
     }
     @PostMapping
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
