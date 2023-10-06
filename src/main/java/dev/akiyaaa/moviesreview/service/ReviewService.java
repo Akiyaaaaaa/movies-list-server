@@ -1,7 +1,9 @@
 package dev.akiyaaa.moviesreview.service;
 
+import dev.akiyaaa.moviesreview.models.DTO.request.ReviewRequest;
 import dev.akiyaaa.moviesreview.models.Movie;
 import dev.akiyaaa.moviesreview.models.Review;
+import dev.akiyaaa.moviesreview.models.User;
 import dev.akiyaaa.moviesreview.repositories.ReviewRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ReviewService {
@@ -20,11 +23,26 @@ public class ReviewService {
     private ReviewRepository reviewRepository;
     @Autowired
     private MongoTemplate mongoTemplate;
-    public Review createReview(String reviewContent, String imdbId){
-        Review review = reviewRepository.insert(new Review(reviewContent, LocalDateTime.now(), LocalDateTime.now(), Boolean.FALSE));
+    
+    public List<Review> getAll(){
+        return reviewRepository.findAll();
+    }
+    public Review createReview(ReviewRequest reviewRequest){
+        User user = new User();
+        user.setId(reviewRequest.getUserId());
         
+        // Create the Review object and set its properties
+        Review review = new Review();
+        review.setBody(reviewRequest.getReviewContent());
+        review.setCreated(LocalDateTime.now());
+        review.setUpdated(LocalDateTime.now());
+        review.setIsUpdated(Boolean.FALSE);
+        review.setUser(user);
+        
+        // Insert the Review into the repository
+        review = reviewRepository.insert(review);
         mongoTemplate.update(Movie.class)
-                .matching(Criteria.where("imdbId").is(imdbId))
+                .matching(Criteria.where("imdbId").is(reviewRequest.getImdbId()))
                 .apply(new Update().push("reviews").value(review))
                 .first();
         return review;

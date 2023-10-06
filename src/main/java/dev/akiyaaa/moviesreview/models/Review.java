@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 import java.time.LocalDateTime;
 
@@ -15,12 +16,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Review {
     @Id
-    private ObjectId id;
+    private String id;
     private String body;
     private LocalDateTime created;
     private LocalDateTime updated;
     private Boolean isUpdated;
-    
+    @DocumentReference
+    private User user;
     public Review(String body, LocalDateTime created, LocalDateTime updated, Boolean isUpdated) {
         this.body = body;
         this.created = created;
